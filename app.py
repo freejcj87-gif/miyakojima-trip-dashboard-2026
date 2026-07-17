@@ -16,7 +16,6 @@ st.set_page_config(
 )
 
 
-@st.cache_data
 def load_data():
     itinerary = pd.read_csv(DATA / "itinerary.csv", dtype=str).fillna("")
     itinerary["date"] = pd.to_datetime(itinerary["date"])
