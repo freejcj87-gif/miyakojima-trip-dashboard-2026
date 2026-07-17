@@ -1,4 +1,5 @@
 from pathlib import Path
+from html import escape
 
 import altair as alt
 import pandas as pd
@@ -23,10 +24,12 @@ def load_data():
     tides["date"] = pd.to_datetime(tides["date"])
     for col in ["high_1_cm", "high_2_cm", "low_1_cm", "low_2_cm"]:
         tides[col] = pd.to_numeric(tides[col])
-    return itinerary, tides
+    restaurants = pd.read_csv(DATA / "restaurants.csv", dtype=str).fillna("")
+    restaurants["rank"] = pd.to_numeric(restaurants["rank"])
+    return itinerary, tides, restaurants
 
 
-itinerary, tides = load_data()
+itinerary, tides, restaurants = load_data()
 
 st.markdown(
     """
@@ -44,6 +47,17 @@ st.markdown(
     .metric-grid {display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin:1rem 0;}
     .metric-card {background:white; border:1px solid #DDEBEA; padding:.85rem 1rem; border-radius:14px;}
     .metric-label {font-size:.82rem; color:#496579;} .metric-value {font-size:1.55rem; color:#17324D; margin-top:.2rem;}
+    .restaurant-card {background:white; border:1px solid #DDEBEA; border-radius:14px;
+                      padding:1rem 1.1rem; margin:.7rem 0; box-shadow:0 2px 12px rgba(15,48,74,.06);}
+    .restaurant-head {display:flex; gap:.55rem; align-items:flex-start; margin-bottom:.45rem;}
+    .restaurant-rank {background:#17324D; color:white; border-radius:999px; padding:.18rem .55rem;
+                      font-size:.75rem; white-space:nowrap;}
+    .restaurant-name {font-weight:800; font-size:1.05rem; color:#17324D;}
+    .restaurant-meta {color:#496579; font-size:.88rem; line-height:1.55;}
+    .restaurant-booking {margin:.45rem 0; padding:.45rem .65rem; border-radius:9px; background:#FFF7D6; color:#725A00;}
+    .restaurant-links {display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.65rem;}
+    .restaurant-links a {text-decoration:none; border-radius:9px; padding:.45rem .7rem; font-weight:700;
+                         background:#E6F7F5; color:#0F5F59; border:1px solid #B8E2DE;}
     @media (max-width: 768px) {
       .block-container {padding:1rem .8rem 3rem;}
       .hero {padding:1.1rem 1rem; border-radius:14px;}
@@ -51,6 +65,7 @@ st.markdown(
       .metric-grid {grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem;}
       .metric-card {padding:.7rem .75rem;} .metric-value {font-size:1.2rem;}
       .event {padding:.75rem .8rem;} .event-place {font-size:1rem;}
+      .restaurant-card {padding:.85rem .8rem;} .restaurant-name {font-size:1rem;}
       [data-testid="stTabs"] button {padding-left:.55rem; padding-right:.55rem; font-size:.82rem;}
     }
     </style>
@@ -101,8 +116,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_timeline, tab_overview, tab_tides, tab_check = st.tabs(
-    ["🕒 날짜별 타임라인", "🗓️ 전체 일정", "🌊 조석·일몰", "✅ 예약·안전"]
+tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check = st.tabs(
+    ["🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전"]
 )
 
 with tab_timeline:
@@ -167,6 +182,72 @@ with tab_overview:
         mime="text/csv",
     )
 
+with tab_restaurants:
+    st.subheader("숙소 주변 검토 식당 20곳")
+    st.caption("엑셀 검토 목록에서 여행 중 판단에 필요한 정보만 추렸습니다. 거리·이동시간과 예약 가능 여부는 출발 전 다시 확인하세요.")
+
+    search_col, booking_col = st.columns([1.35, 1])
+    with search_col:
+        restaurant_search = st.text_input("식당·음식 검색", placeholder="예: 미야코규, 카페, 보부리")
+    with booking_col:
+        booking_filter = st.selectbox(
+            "예약 기준",
+            ["전체", "온라인 예약 가능/권장", "전화/현장 확인", "예약 불필요/불가"],
+        )
+
+    restaurant_view = restaurants.copy()
+    restaurant_view["booking_group"] = restaurant_view["reservation"].apply(
+        lambda value: (
+            "예약 불필요/불가"
+            if "불필요" in value or "불가" in value
+            else "전화/현장 확인"
+            if "전화" in value or "현장" in value
+            else "온라인 예약 가능/권장"
+        )
+    )
+    if restaurant_search:
+        query = restaurant_search.strip().lower()
+        searchable = restaurant_view[["name", "cuisine", "distance", "family_group", "alternative_slot"]].agg(" ".join, axis=1).str.lower()
+        restaurant_view = restaurant_view[searchable.str.contains(query, regex=False)]
+    if booking_filter != "전체":
+        restaurant_view = restaurant_view[restaurant_view["booking_group"].eq(booking_filter)]
+
+    st.caption(f"조건에 맞는 식당 {len(restaurant_view)}곳")
+    if restaurant_view.empty:
+        st.info("검색 조건에 맞는 식당이 없습니다.")
+    for row in restaurant_view.sort_values("rank").itertuples():
+        official_link = (
+            f'<a href="{escape(row.reservation_url, quote=True)}" target="_blank">예약·공식 정보</a>'
+            if row.reservation_url
+            else ""
+        )
+        st.markdown(
+            f"""
+            <div class="restaurant-card">
+              <div class="restaurant-head">
+                <span class="restaurant-rank">추천 {row.rank}</span>
+                <span class="restaurant-name">{escape(row.name)}</span>
+              </div>
+              <div class="restaurant-meta"><b>음식</b> {escape(row.cuisine)} · {escape(row.recommended_time)}</div>
+              <div class="restaurant-meta"><b>숙소 기준</b> {escape(row.distance)}</div>
+              <div class="restaurant-meta"><b>이용</b> {escape(row.family_group)}</div>
+              <div class="restaurant-meta"><b>대체 가능 일정</b> {escape(row.alternative_slot)}</div>
+              <div class="restaurant-booking"><b>예약</b> {escape(row.reservation)}</div>
+              <div class="restaurant-links">
+                <a href="{escape(row.map_url, quote=True)}" target="_blank">Google 지도</a>
+                {official_link}
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    st.download_button(
+        "핵심 식당 리스트 CSV 다운로드",
+        restaurants.to_csv(index=False).encode("utf-8-sig"),
+        file_name="miyakojima_restaurants_core.csv",
+        mime="text/csv",
+    )
+
 with tab_tides:
     st.subheader("2026년 조석 높이")
     chart_data = tides.melt(
@@ -217,4 +298,4 @@ with tab_check:
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
 st.divider()
-st.caption("v0.3.1 · 7/31 공항 도착 버퍼 및 8/2 렌터카 11:00 반납 동선 업데이트 · 운영시간·날씨·투어 일정은 출발 직전 다시 확인하세요.")
+st.caption("v0.4.0 · 엑셀 검토 식당 20곳 핵심 리스트 추가 · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
