@@ -159,8 +159,9 @@ with tab_timeline:
         if selected_day == "1일차":
             st.success("11:00 공항 도착 → PADA X SOU 무료 픽업 → 12:40 17END. 간조 13:37을 활용합니다.")
         elif selected_day == "3일차":
-            st.warning("11:30까지 시모지시마 공항 도착. 아라구스쿠에서 10:15 출발, 11:15 도착 목표로 15분 여유를 둡니다.")
+            st.warning("11:30까지 시모지시마 공항 도착. 숙소에서 10:30 출발, 11:15 도착 목표로 15분 여유를 둡니다.")
         elif selected_day == "4일차":
+            st.warning("야비지 투어 출항 08:00은 업체 고정 시간입니다. 5일 중 이 날만 06:30 이른 시작이 필요합니다.")
             st.error("야비지 투어 종료 약 17:00 → 야키니쿠 나카오 19:00, 6석 예약 필수")
         elif selected_day == "5일차":
             st.warning("PADA X SOU 지정 사무실 반납. 지도에 ‘폐업함’으로 표시되어도 안내받은 위치가 맞습니다.")
@@ -280,7 +281,7 @@ with tab_check:
     st.subheader("출발 전 필수 확인")
     checklist = [
         ("항공편", "7/29 11:00 도착, 8/2 12:00 항공편 탑승 확정"),
-        ("7/31 공항 픽업", "11:30까지 시모지시마 공항 도착. 아라구스쿠에서 10:15 출발하고 도착편·짐 수량 확인"),
+        ("7/31 공항 픽업", "11:30까지 시모지시마 공항 도착. 숙소에서 10:30 출발하고 도착편·짐 수량 확인"),
         ("렌터카 서류", "7/26까지 운전자 전원의 국제면허 앞면·사진면, 여권 사진면, 한국면허증 앞면 제출"),
         ("공항 픽업", "7/29 출국장 앞 담당자 피켓 확인 후 도착 채팅, 무료 픽업으로 PADA X SOU 사무실 이동"),
         ("차량", "성인 4명+아동 2명과 4박 짐이 들어가는 차급·주니어 시트 확인"),
@@ -298,4 +299,4 @@ with tab_check:
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
 st.divider()
-st.caption("v0.4.0 · 엑셀 검토 식당 20곳 핵심 리스트 추가 · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
+st.caption("v0.5.0 · 아침 시작 09:00 기준으로 일정 조정(야비지 투어일 제외) · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
