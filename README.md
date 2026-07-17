@@ -4,6 +4,8 @@
 
 **Live app:** https://miyakojima-trip-dashboard-2026-rrrepfl5rzzfhfbss42rxn.streamlit.app/
 
+현재 버전 `v0.2.0`에는 PADA X SOU 렌터카 픽업·반납 체크와 모바일 반응형 레이아웃이 반영되어 있습니다.
+
 ## 공개 데이터 원칙
 
 - 상세 숙소 주소와 개인 정보는 저장소 및 앱에서 제외합니다.
