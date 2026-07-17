@@ -12,7 +12,7 @@ st.set_page_config(
     page_title="미야코지마 4박 5일",
     page_icon="🏝️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -35,15 +35,25 @@ st.markdown(
     .block-container {padding-top: 1.7rem; padding-bottom: 4rem;}
     .hero {background:linear-gradient(120deg,#12304A,#0F766E); padding:1.5rem 1.7rem;
            border-radius:18px; color:white; margin-bottom:1rem;}
-    .hero h1 {margin:0; font-size:2.15rem;} .hero p {margin:.5rem 0 0; opacity:.92;}
+    .hero h1 {margin:0; font-size:clamp(1.55rem,5vw,2.15rem);} .hero p {margin:.5rem 0 0; opacity:.92;}
     .event {border-left:5px solid #0F766E; background:white; border-radius:10px;
             padding:.85rem 1rem; margin:.55rem 0; box-shadow:0 2px 12px rgba(15,118,110,.08);}
     .event-time {font-weight:800; color:#0F766E;} .event-place {font-size:1.08rem; font-weight:750;}
     .tag {display:inline-block; background:#E6F7F5; color:#0F5F59; border-radius:999px;
           padding:.15rem .55rem; margin:.25rem .25rem 0 0; font-size:.78rem;}
     .warn {background:#FFF7D6; border:1px solid #F5D26B; border-radius:12px; padding:.8rem 1rem;}
-    [data-testid="stMetric"] {background:white; border:1px solid #DDEBEA; padding:.8rem;
-                              border-radius:14px;}
+    .metric-grid {display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin:1rem 0;}
+    .metric-card {background:white; border:1px solid #DDEBEA; padding:.85rem 1rem; border-radius:14px;}
+    .metric-label {font-size:.82rem; color:#496579;} .metric-value {font-size:1.55rem; color:#17324D; margin-top:.2rem;}
+    @media (max-width: 768px) {
+      .block-container {padding:1rem .8rem 3rem;}
+      .hero {padding:1.1rem 1rem; border-radius:14px;}
+      .hero p {font-size:.86rem; line-height:1.45;}
+      .metric-grid {grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem;}
+      .metric-card {padding:.7rem .75rem;} .metric-value {font-size:1.2rem;}
+      .event {padding:.75rem .8rem;} .event-place {font-size:1rem;}
+      [data-testid="stTabs"] button {padding-left:.55rem; padding-right:.55rem; font-size:.82rem;}
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -69,6 +79,10 @@ with st.sidebar:
     all_categories = sorted(itinerary["category"].unique().tolist())
     categories = st.multiselect("일정 유형", all_categories, default=all_categories)
     st.divider()
+    st.markdown("**🚐 PADA X SOU 렌터카**")
+    st.caption("7/29 공항 무료 픽업 · 8/2 지정 사무실 반납")
+    st.link_button("반납 사무실 지도", "https://maps.app.goo.gl/zkaRcF2k9TVfqGvq7?g_st=ac", use_container_width=True)
+    st.divider()
     st.caption("공개용 대시보드에는 숙소 상세 주소와 개인 정보가 포함되지 않습니다.")
 
 day_data = itinerary[itinerary["day_label"].eq(selected_day)].copy()
@@ -76,11 +90,17 @@ filtered_day = day_data[day_data["category"].isin(categories)]
 selected_date = day_data["date"].iloc[0]
 tide = tides[tides["date"].eq(selected_date)].iloc[0]
 
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("오늘 일정", f"{len(day_data)}개")
-m2.metric("식사·카페", f"{day_data['category'].isin(['식사','카페']).sum()}곳")
-m3.metric("첫 만조", f"{tide.high_1} · {tide.high_1_cm}cm")
-m4.metric("일몰", tide.sunset)
+st.markdown(
+    f"""
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-label">오늘 일정</div><div class="metric-value">{len(day_data)}개</div></div>
+      <div class="metric-card"><div class="metric-label">식사·카페</div><div class="metric-value">{day_data['category'].isin(['식사','카페']).sum()}곳</div></div>
+      <div class="metric-card"><div class="metric-label">첫 만조</div><div class="metric-value">{tide.high_1} · {tide.high_1_cm}cm</div></div>
+      <div class="metric-card"><div class="metric-label">일몰</div><div class="metric-value">{tide.sunset}</div></div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 tab_timeline, tab_overview, tab_tides, tab_check = st.tabs(
     ["🕒 날짜별 타임라인", "🗓️ 전체 일정", "🌊 조석·일몰", "✅ 예약·안전"]
@@ -122,10 +142,13 @@ with tab_timeline:
             unsafe_allow_html=True,
         )
         st.subheader("핵심 운영")
-        if selected_day == "4일차":
+        if selected_day == "1일차":
+            st.success("PADA X SOU 담당자가 출국장 앞에서 피켓 대기 · 도착 시 채팅 · 무료 픽업으로 사무실까지 5분 이내")
+        elif selected_day == "4일차":
             st.error("야비지 투어 종료 약 17:00 → 야키니쿠 나카오 19:00, 6석 예약 필수")
         elif selected_day == "5일차":
-            st.warning("출발 15:30 가정. 늦은 항공편이면 17END를 13:30 이후로 이동")
+            st.warning("PADA X SOU 지정 사무실 반납. 지도에 ‘폐업함’으로 표시되어도 안내받은 위치가 맞습니다.")
+            st.info("출발 15:30 가정. 늦은 항공편이면 17END를 13:30 이후로 이동")
         else:
             st.info("아이 컨디션과 현장 파도·바람이 일정표보다 우선입니다.")
 
@@ -174,7 +197,10 @@ with tab_check:
     st.subheader("출발 전 필수 확인")
     checklist = [
         ("항공편", "7/29 도착·8/2 출발 시각 확정 후 1·5일차 조정"),
-        ("렌터카", "성인 4명+아동 2명과 4박 짐이 들어가는 미니밴급·주니어 시트 확인"),
+        ("렌터카 서류", "7/26까지 운전자 전원의 국제면허 앞면·사진면, 여권 사진면, 한국면허증 앞면 제출"),
+        ("공항 픽업", "7/29 출국장 앞 담당자 피켓 확인 후 도착 채팅, 무료 픽업으로 PADA X SOU 사무실 이동"),
+        ("차량", "성인 4명+아동 2명과 4박 짐이 들어가는 차급·주니어 시트 확인"),
+        ("반납", "8/2 지정 사무실로 반납. 지도의 ‘폐업함’ 표시와 무관하게 안내 위치 이용"),
         ("야비지", "8세 2명 참가 가능 연령·집합지·종료·아동용 구명조끼·화장실 확인"),
         ("야키니쿠", "8/1 19:00 나카오 성인 4명+8세 2명, 총 6석 예약"),
         ("식당", "Free Bird·보부리 6석과 아동 동반, Ninufa·Cafe Nuis 당일 영업 확인"),
@@ -183,9 +209,9 @@ with tab_check:
     ]
     for label, task in checklist:
         st.checkbox(f"**{label}** — {task}", key=f"check-{label}")
+    st.link_button("PADA X SOU 반납 사무실 지도", "https://maps.app.goo.gl/zkaRcF2k9TVfqGvq7?g_st=ac")
     st.divider()
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
 st.divider()
-st.caption("v0.1.0 · 마지막 정리 2026-07-17 · 운영시간·날씨·투어 일정은 출발 직전 다시 확인하세요.")
-
+st.caption("v0.2.0 · 렌터카 픽업·반납 및 모바일 레이아웃 업데이트 · 운영시간·날씨·투어 일정은 출발 직전 다시 확인하세요.")
