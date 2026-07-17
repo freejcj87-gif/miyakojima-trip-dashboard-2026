@@ -1,0 +1,38 @@
+event_id,date,day_label,start,end,place,area,category,activity,status,tide_note,meal,maps_url
+D1-01,2026-07-29,1일차,15:30,16:15,미야코 시모지시마 공항,시모지시마,이동,도착·수하물 수령,항공편 확인,도착 시각 가정,,https://www.google.com/maps/search/?api=1&query=Miyako%20Shimojishima%20Airport
+D1-02,2026-07-29,1일차,16:15,17:00,렌터카 영업소,시모지시마,이동,6인승 이상 차량 인수,예약 필요,없음,,https://www.google.com/maps/search/?api=1&query=Shimojishima%20Airport%20rental%20car
+D1-03,2026-07-29,1일차,17:00,17:35,이라부대교,이라부,관광,공항에서 숙소 방향 전망 드라이브,확정,없음,,https://www.google.com/maps/search/?api=1&query=Irabu%20Bridge%20Miyakojima
+D1-04,2026-07-29,1일차,17:35,18:20,쿠가이 숙소 거점,히라라,휴식,체크인·휴식,확정,없음,,
+D1-05,2026-07-29,1일차,18:30,19:40,Pasta House Niwa,히라라,식사,숙소 인근 첫날 저녁,영업 확인,없음,저녁,https://www.google.com/maps/search/?api=1&query=Pasta%20House%20Niwa%20Miyakojima
+D1-06,2026-07-29,1일차,19:50,20:40,MaxValu 미야코미나미점·다이소,히라라,쇼핑,생수·아침·해변 용품 구매,확정,없음,,https://www.google.com/maps/search/?api=1&query=MaxValu%20Miyako%20Minami
+D2-01,2026-07-30,2일차,06:50,07:20,쿠가이 숙소 거점,히라라,식사,간단한 아침·장비 점검,확정,없음,아침,
+D2-02,2026-07-30,2일차,07:20,08:05,후나쿠스 비치 이동,이케마,이동,숙소에서 북부 이동,확정,07:22 만조 직후 도착,,https://www.google.com/maps/search/?api=1&query=Funakusu%20Beach%20Miyakojima
+D2-03,2026-07-30,2일차,08:05,10:05,후나쿠스 비치,이케마,해변,스노클링·해변,날씨 확인,만조 07:22 194cm 직후,,https://www.google.com/maps/search/?api=1&query=Funakusu%20Beach%20Miyakojima
+D2-04,2026-07-30,2일차,10:20,11:05,Gelato Cafe Ninufa,이케마,카페,젤라토·휴식,영업 확인,없음,간식,https://www.google.com/maps/search/?api=1&query=Gelato%20Cafe%20Ninufa
+D2-05,2026-07-30,2일차,11:15,11:45,이케마대교 전망,이케마,관광,전망·사진,확정,낮음,,https://www.google.com/maps/search/?api=1&query=Ikema%20Bridge%20Miyakojima
+D2-06,2026-07-30,2일차,12:00,13:10,HARRY'S Shrimp Truck,북부,식사,갈릭 슈림프 점심,영업 확인,없음,점심,https://www.google.com/maps/search/?api=1&query=HARRY%27S%20Shrimp%20Truck%20Miyakojima
+D2-07,2026-07-30,2일차,13:25,14:05,니시헨나자키,북부,관광,곶 산책·풍경,선택,없음,,https://www.google.com/maps/search/?api=1&query=Nishi-Hennazaki%20Miyakojima
+D2-08,2026-07-30,2일차,15:00,17:30,쿠가이 숙소 거점,히라라,휴식,샤워·낮잠·정비,확정,없음,,
+D2-09,2026-07-30,2일차,18:20,20:10,Dining & Bar Free Bird,히라라,식사,노을 시간 저녁,6석 예약 권장,18:50 일몰,저녁,https://www.google.com/maps/search/?api=1&query=Dining%20%26%20Bar%20Free%20Bird%20Miyakojima
+D3-01,2026-07-31,3일차,06:45,07:10,쿠가이 숙소 거점,히라라,식사,간단한 아침,확정,없음,아침,
+D3-02,2026-07-31,3일차,07:10,07:55,아라구스쿠 해안 이동,동부,이동,숙소에서 동부 이동,확정,07:58 만조 도착,,https://www.google.com/maps/search/?api=1&query=Aragusuku%20Beach%20Miyakojima
+D3-03,2026-07-31,3일차,08:00,10:10,아라구스쿠 해안,동부,해변,스노클링·해변,날씨 확인,만조 07:58 197cm 전후,,https://www.google.com/maps/search/?api=1&query=Aragusuku%20Beach%20Miyakojima
+D3-04,2026-07-31,3일차,10:35,11:25,히가시헨나자키,동부,관광,곶 산책·전망,확정,없음,,https://www.google.com/maps/search/?api=1&query=Higashi-Hennazaki%20Miyakojima
+D3-05,2026-07-31,3일차,11:50,12:50,Cafe Nuis,동부,식사,점심·카페,영업 확인,없음,점심,https://www.google.com/maps/search/?api=1&query=Cafe%20Nuis%20Miyakojima
+D3-06,2026-07-31,3일차,13:25,14:20,시마 카페 돈카라야,남부,카페,정원 카페·간식,영업 확인,없음,간식,https://www.google.com/maps/search/?api=1&query=Shima%20Cafe%20Dunkaraya%20Miyakojima
+D3-07,2026-07-31,3일차,15:00,17:10,요나하 마에하마 비치,남서부,해변,해변 산책·수영 선택,날씨 확인,14:36 간조 후 상승,,https://www.google.com/maps/search/?api=1&query=Yonaha%20Maehama%20Beach%20Miyakojima
+D3-08,2026-07-31,3일차,17:45,18:20,Blue Seal 파이나가마점,히라라,카페,아이스크림·휴식,영업 확인,없음,간식,https://www.google.com/maps/search/?api=1&query=Blue%20Seal%20Miyakojima%20Painagama
+D3-09,2026-07-31,3일차,19:00,20:30,섬의 철판 오코노미야키 보부리,히라라,식사,철판요리 저녁,6석 예약 권장,없음,저녁,https://www.google.com/maps/search/?api=1&query=Boburi%20Miyakojima%20okonomiyaki
+D4-01,2026-08-01,4일차,06:30,07:15,쿠가이 숙소 거점,히라라,식사,아침·투어 장비 확인,확정,없음,아침,
+D4-02,2026-08-01,4일차,07:15,08:00,야비지 투어 집합지,업체 지정,이동,집합지 이동·접수,업체 확인,높음,,https://www.google.com/maps/search/?api=1&query=Ikema%20Port%20Miyakojima
+D4-03,2026-08-01,4일차,08:00,17:00,야비지 투어,야비지,투어,보트·스노클링,예약 확인,간조 15:05 39cm,점심 포함 확인,https://www.google.com/maps/search/?api=1&query=Yabiji%20Miyakojima
+D4-04,2026-08-01,4일차,17:00,18:20,쿠가이 숙소 거점,히라라,휴식,복귀·샤워·휴식,확정,없음,,
+D4-05,2026-08-01,4일차,19:00,21:00,야키니쿠 나카오,히라라,식사,미야코규 야키니쿠,6석 예약 필수,없음,저녁,https://www.google.com/maps/search/?api=1&query=Yakiniku%20Nakao%20Miyakojima
+D5-01,2026-08-02,5일차,07:30,08:45,쿠가이 숙소 거점,히라라,휴식,아침·짐 정리·체크아웃,확정,출발 15:30 가정,아침,
+D5-02,2026-08-02,5일차,08:45,09:30,사와다노하마 이동,시모지시마,이동,공항 방면 이동,선택,09:12 만조 직후,,https://www.google.com/maps/search/?api=1&query=Sawada%20Beach%20Miyakojima
+D5-03,2026-08-02,5일차,09:30,10:10,사와다노하마,시모지시마,해변,산책·사진,선택,만조 09:12 193cm 직후,,https://www.google.com/maps/search/?api=1&query=Sawada%20Beach%20Miyakojima
+D5-04,2026-08-02,5일차,10:25,11:20,17END,시모지시마,해변,산책·비행기 전망,선택,간조 15:34보다 이른 방문,,https://www.google.com/maps/search/?api=1&query=17END%20Shimojishima
+D5-05,2026-08-02,5일차,11:35,12:30,미야코 시모지시마 공항,시모지시마,식사,공항 점심·기념품,영업 확인,없음,점심,https://www.google.com/maps/search/?api=1&query=Miyako%20Shimojishima%20Airport
+D5-06,2026-08-02,5일차,12:30,13:30,렌터카 반납,시모지시마,이동,주유·차량 반납,예약 확인,없음,,https://www.google.com/maps/search/?api=1&query=Shimojishima%20Airport%20rental%20car
+D5-07,2026-08-02,5일차,13:30,15:30,미야코 시모지시마 공항,시모지시마,이동,체크인·출발,항공편 확인,출발 15:30 가정,,https://www.google.com/maps/search/?api=1&query=Miyako%20Shimojishima%20Airport
+
