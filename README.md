@@ -2,6 +2,8 @@
 
 2026-07-29부터 2026-08-02까지의 미야코지마 4박 5일 여행을 관리하는 Streamlit 대시보드입니다.
 
+**Live app:** https://miyakojima-trip-dashboard-2026-rrrepfl5rzzfhfbss42rxn.streamlit.app/
+
 ## 공개 데이터 원칙
 
 - 상세 숙소 주소와 개인 정보는 저장소 및 앱에서 제외합니다.
@@ -16,9 +18,10 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+Streamlit Community Cloud는 `runtime.txt`에 따라 Python 3.12를 사용합니다.
+
 ## 업데이트
 
 1. `data/itinerary.csv` 또는 `data/tides.csv`를 수정합니다.
 2. 앱을 로컬에서 확인합니다.
 3. 변경 내용을 GitHub에 푸시하면 Streamlit Community Cloud가 자동으로 다시 배포합니다.
-
