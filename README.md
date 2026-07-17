@@ -4,7 +4,7 @@
 
 **Live app:** https://miyakojima-trip-dashboard-2026-rrrepfl5rzzfhfbss42rxn.streamlit.app/
 
-현재 버전 `v0.2.0`에는 PADA X SOU 렌터카 픽업·반납 체크와 모바일 반응형 레이아웃이 반영되어 있습니다.
+현재 버전 `v0.3.1`에는 7/29 11시 도착, 7/31 11시 30분 공항 도착, 8/2 11시 렌터카 사무실 도착 및 12시 항공편 탑승 동선이 반영되어 있습니다.
 
 ## 공개 데이터 원칙
 
