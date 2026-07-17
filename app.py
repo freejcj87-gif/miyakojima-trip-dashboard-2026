@@ -116,9 +116,85 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check = st.tabs(
-    ["🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전"]
+tab_grid, tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check = st.tabs(
+    ["📅 시간표", "🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전"]
 )
+
+with tab_grid:
+    st.subheader("5일 전체 시간표")
+    st.caption("대학교 시간표처럼 한눈에 보는 전체 동선입니다. 블록에 마우스를 올리면 상세 활동이 표시됩니다.")
+
+    CAT_STYLE = {
+        "이동": ("#EDF1F5", "#49607A"),
+        "해변": ("#DBEFFB", "#0B6AA8"),
+        "투어": ("#D7EEF0", "#0F766E"),
+        "식사": ("#FFE8D1", "#A85B00"),
+        "카페": ("#FFF3C4", "#8A6D00"),
+        "관광": ("#E3F4E3", "#2F7D32"),
+        "휴식": ("#EFE9F7", "#6B4FA1"),
+        "쇼핑": ("#FBE3EE", "#A83E6E"),
+    }
+    PX_PER_HOUR = 52
+    GRID_START, GRID_END = 6 * 60, 21 * 60 + 30
+    col_height = (GRID_END - GRID_START) / 60 * PX_PER_HOUR
+
+    def _to_min(hhmm):
+        h, m = hhmm.split(":")
+        return int(h) * 60 + int(m)
+
+    weekday_ko = ["월", "화", "수", "목", "금", "토", "일"]
+    axis_html = "".join(
+        f'<div class="tt-hour" style="top:{(h * 60 - GRID_START) / 60 * PX_PER_HOUR}px">{h:02d}</div>'
+        for h in range(6, 22)
+    )
+    cols_html = ""
+    for day in itinerary["day_label"].drop_duplicates():
+        sub = itinerary[itinerary["day_label"].eq(day)]
+        day_date = sub["date"].iloc[0]
+        blocks = ""
+        for row in sub.itertuples():
+            top = (_to_min(row.start) - GRID_START) / 60 * PX_PER_HOUR
+            height = max((_to_min(row.end) - _to_min(row.start)) / 60 * PX_PER_HOUR - 2, 14)
+            bg, fg = CAT_STYLE.get(row.category, ("#EEF2F5", "#3D5468"))
+            tip = escape(f"{row.start}–{row.end} {row.place} · {row.activity}", quote=True)
+            blocks += (
+                f'<div class="tt-ev" title="{tip}" style="top:{top}px;height:{height}px;'
+                f'background:{bg};color:{fg}"><span class="tt-ev-t">{row.start}</span> {escape(row.place)}</div>'
+            )
+        cols_html += (
+            f'<div class="tt-col"><div class="tt-head">{day}<br>'
+            f'<span>{day_date:%m/%d}({weekday_ko[day_date.weekday()]})</span></div>'
+            f'<div class="tt-body" style="height:{col_height}px">{blocks}</div></div>'
+        )
+    legend_html = "".join(
+        f'<span class="tag" style="background:{bg};color:{fg}">{cat}</span>'
+        for cat, (bg, fg) in CAT_STYLE.items()
+    )
+    st.markdown(
+        f"""
+        <style>
+        .tt-wrap {{overflow-x:auto; padding-bottom:.6rem;}}
+        .tt {{display:flex; gap:5px; min-width:660px;}}
+        .tt-axis {{width:34px; flex:none;}}
+        .tt-axis-body {{position:relative;}}
+        .tt-hour {{position:absolute; right:4px; transform:translateY(-50%); font-size:.66rem; color:#7A93A5;}}
+        .tt-col {{flex:1; min-width:112px;}}
+        .tt-head {{text-align:center; font-weight:800; color:#17324D; font-size:.85rem; height:42px; line-height:1.3;}}
+        .tt-head span {{font-weight:600; color:#496579; font-size:.72rem;}}
+        .tt-body {{position:relative; background:white; border:1px solid #DDEBEA; border-radius:10px;
+                   background-image:repeating-linear-gradient(to bottom, #EFF4F3 0 1px, transparent 1px {PX_PER_HOUR}px);}}
+        .tt-ev {{position:absolute; left:3px; right:3px; border-radius:6px; padding:1px 5px;
+                 font-size:.63rem; line-height:1.25; overflow:hidden; font-weight:600;}}
+        .tt-ev-t {{font-weight:800; opacity:.75;}}
+        </style>
+        <div style="margin-bottom:.5rem">{legend_html}</div>
+        <div class="tt-wrap"><div class="tt">
+          <div class="tt-axis"><div class="tt-head"></div><div class="tt-axis-body" style="height:{col_height}px">{axis_html}</div></div>
+          {cols_html}
+        </div></div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 with tab_timeline:
     left, right = st.columns([2.15, 1])
@@ -299,4 +375,4 @@ with tab_check:
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
 st.divider()
-st.caption("v0.5.0 · 아침 시작 09:00 기준으로 일정 조정(야비지 투어일 제외) · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
+st.caption("v0.6.0 · 5일 전체 시간표 뷰 추가 · 아침 시작 09:00 기준(야비지 투어일 제외) · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
