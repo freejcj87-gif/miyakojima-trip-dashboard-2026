@@ -1,3 +1,4 @@
+import base64
 from pathlib import Path
 from html import escape
 
@@ -36,8 +37,18 @@ st.markdown(
     <style>
     .block-container {padding-top: 1.7rem; padding-bottom: 4rem;}
     .hero {background:linear-gradient(120deg,#12304A,#0F766E); padding:1.5rem 1.7rem;
-           border-radius:18px; color:white; margin-bottom:1rem;}
+           border-radius:18px; color:white; margin-bottom:1rem;
+           display:flex; align-items:center; gap:1.25rem;}
     .hero h1 {margin:0; font-size:clamp(1.55rem,5vw,2.15rem);} .hero p {margin:.5rem 0 0; opacity:.92;}
+    .hero-img {width:138px; height:138px; object-fit:cover; object-position:center 62%;
+               border-radius:18px; border:3px solid rgba(255,255,255,.6); flex:none;
+               box-shadow:0 4px 16px rgba(0,0,0,.28);}
+    .badge-need {display:inline-block; background:#D93636; color:#fff; border-radius:999px;
+                 padding:.16rem .6rem; margin:.25rem .25rem 0 0; font-size:.76rem; font-weight:800;
+                 box-shadow:0 1px 6px rgba(217,54,54,.35); vertical-align:middle;}
+    .badge-done {display:inline-block; background:#1E9E4B; color:#fff; border-radius:999px;
+                 padding:.16rem .6rem; margin:.25rem .25rem 0 0; font-size:.76rem; font-weight:800;
+                 box-shadow:0 1px 6px rgba(30,158,75,.35); vertical-align:middle;}
     .event {border-left:5px solid #0F766E; background:white; border-radius:10px;
             padding:.85rem 1rem; margin:.55rem 0; box-shadow:0 2px 12px rgba(15,118,110,.08);}
     .event-time {font-weight:800; color:#0F766E;} .event-place {font-size:1.08rem; font-weight:750;}
@@ -60,8 +71,9 @@ st.markdown(
                          background:#E6F7F5; color:#0F5F59; border:1px solid #B8E2DE;}
     @media (max-width: 768px) {
       .block-container {padding:1rem .8rem 3rem;}
-      .hero {padding:1.1rem 1rem; border-radius:14px;}
+      .hero {padding:1.1rem 1rem; border-radius:14px; gap:.8rem;}
       .hero p {font-size:.86rem; line-height:1.45;}
+      .hero-img {width:92px; height:92px; border-radius:14px;}
       .metric-grid {grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem;}
       .metric-card {padding:.7rem .75rem;} .metric-value {font-size:1.2rem;}
       .event {padding:.75rem .8rem;} .event-place {font-size:1rem;}
@@ -73,11 +85,20 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+hero_img_path = ROOT / "assets" / "hero.jpg"
+hero_img_html = ""
+if hero_img_path.exists():
+    hero_b64 = base64.b64encode(hero_img_path.read_bytes()).decode()
+    hero_img_html = f'<img class="hero-img" src="data:image/jpeg;base64,{hero_b64}" alt="규나와 연우"/>'
+
 st.markdown(
-    """
+    f"""
     <div class="hero">
-      <h1>🏝️ MIYAKOJIMA 4박 5일</h1>
-      <p>2026.07.29–08.02 · 성인 4명 + 8세 2명 · 렌터카 · 조석 기반 해변 동선</p>
+      {hero_img_html}
+      <div>
+        <h1>🏝️ 규나 &amp; 연우 Summer IN 미야코지마</h1>
+        <p>MIYAKOJIMA 4박 5일 · 2026.07.29–08.02 · 렌터카 · 조석 기반 해변 동선</p>
+      </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -156,10 +177,22 @@ with tab_grid:
             top = (_to_min(row.start) - GRID_START) / 60 * PX_PER_HOUR
             height = max((_to_min(row.end) - _to_min(row.start)) / 60 * PX_PER_HOUR - 2, 14)
             bg, fg = CAT_STYLE.get(row.category, ("#EEF2F5", "#3D5468"))
-            tip = escape(f"{row.start}–{row.end} {row.place} · {row.activity}", quote=True)
+            book_mark, book_style = "", ""
+            if row.booking == "예약필":
+                book_mark = "❗"
+                book_style = "box-shadow:inset 0 0 0 2px #D93636;"
+            elif row.booking == "예약완료":
+                book_mark = "✅"
+                book_style = "box-shadow:inset 0 0 0 2px #1E9E4B;"
+            tip = escape(
+                f"{row.start}–{row.end} {row.place} · {row.activity}"
+                + (f" · {row.booking}" if row.booking else ""),
+                quote=True,
+            )
             blocks += (
                 f'<div class="tt-ev" title="{tip}" style="top:{top}px;height:{height}px;'
-                f'background:{bg};color:{fg}"><span class="tt-ev-t">{row.start}</span> {escape(row.place)}</div>'
+                f'background:{bg};color:{fg};{book_style}">'
+                f'<span class="tt-ev-t">{row.start}</span> {book_mark}{escape(row.place)}</div>'
             )
         cols_html += (
             f'<div class="tt-col"><div class="tt-head">{day}<br>'
@@ -169,6 +202,9 @@ with tab_grid:
     legend_html = "".join(
         f'<span class="tag" style="background:{bg};color:{fg}">{cat}</span>'
         for cat, (bg, fg) in CAT_STYLE.items()
+    ) + (
+        '<span class="badge-need">❗ 예약필</span>'
+        '<span class="badge-done">✅ 예약완료</span>'
     )
     st.markdown(
         f"""
@@ -206,10 +242,16 @@ with tab_timeline:
             map_link = f' · <a href="{row.maps_url}" target="_blank">Google 지도</a>' if row.maps_url else ""
             meal = f'<span class="tag">{row.meal}</span>' if row.meal else ""
             tide_tag = f'<span class="tag">🌊 {row.tide_note}</span>' if row.tide_note and row.tide_note != "없음" else ""
+            if row.booking == "예약필":
+                booking_badge = '<span class="badge-need">❗ 예약필</span>'
+            elif row.booking == "예약완료":
+                booking_badge = '<span class="badge-done">✅ 예약완료</span>'
+            else:
+                booking_badge = ""
             st.markdown(
                 f"""
                 <div class="event">
-                  <span class="event-time">{row.start}–{row.end}</span>
+                  <span class="event-time">{row.start}–{row.end}</span> {booking_badge}
                   <div class="event-place">{row.place}</div>
                   <div>{row.activity}{map_link}</div>
                   <span class="tag">{row.area}</span><span class="tag">{row.category}</span>
@@ -248,9 +290,12 @@ with tab_timeline:
 
 with tab_overview:
     st.subheader("전체 5일 일정")
-    display = itinerary[["date", "day_label", "start", "end", "place", "category", "activity", "status"]].copy()
+    display = itinerary[["date", "day_label", "start", "end", "place", "category", "activity", "status", "booking"]].copy()
     display["date"] = display["date"].dt.strftime("%m/%d")
-    display.columns = ["날짜", "일차", "시작", "종료", "장소", "유형", "활동", "상태"]
+    display["booking"] = display["booking"].map(
+        lambda v: "❗ 예약필" if v == "예약필" else ("✅ 예약완료" if v == "예약완료" else "")
+    )
+    display.columns = ["날짜", "일차", "시작", "종료", "장소", "유형", "활동", "상태", "예약"]
     st.dataframe(display, hide_index=True, use_container_width=True, height=610)
     st.download_button(
         "공개용 일정 CSV 다운로드",
@@ -375,4 +420,4 @@ with tab_check:
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
 st.divider()
-st.caption("v0.6.0 · 5일 전체 시간표 뷰 추가 · 아침 시작 09:00 기준(야비지 투어일 제외) · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
+st.caption("v0.7.0 · 타이틀 리뉴얼·식당 예약필/예약완료 배지 추가 · 아침 시작 09:00 기준(야비지 투어일 제외) · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
