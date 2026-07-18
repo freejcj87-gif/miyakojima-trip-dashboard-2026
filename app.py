@@ -97,7 +97,7 @@ st.markdown(
       {hero_img_html}
       <div>
         <h1>🏝️ 규나 &amp; 연우 Summer IN 미야코지마</h1>
-        <p>MIYAKOJIMA 4박 5일 · 2026.07.29–08.02 · 렌터카 · 조석 기반 해변 동선</p>
+        <p>'26.07.29~'26.08.02</p>
       </div>
     </div>
     """,
