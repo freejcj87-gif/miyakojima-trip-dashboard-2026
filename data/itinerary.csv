@@ -1,11 +1,10 @@
 event_id,date,day_label,start,end,place,area,category,activity,status,tide_note,meal,maps_url,booking,turtle
 D1-01,2026-07-29,1일차,11:00,11:45,미야코 시모지시마 공항,시모지시마,이동,도착·수하물 수령,항공편 확정,11:00 도착,,https://www.google.com/maps/search/?api=1&query=Miyako%20Shimojishima%20Airport,,
 D1-02,2026-07-29,1일차,11:45,12:30,PADA X SOU 렌터카,시모지시마,이동,출국장 앞 피켓 미팅·무료 픽업 후 사무실 이동·차량 인수,예약 확정,도착 시 채팅·사무실까지 편도 5분 이내,,https://maps.app.goo.gl/zkaRcF2k9TVfqGvq7?g_st=ac,,
-D1-02A,2026-07-29,1일차,12:40,13:40,17END,시모지시마,해변,간조 시간 해변 산책·사진,날씨 확인,간조 13:37 34cm 전후,,https://www.google.com/maps/search/?api=1&query=17END%20Shimojishima,,낮음
-D1-02C,2026-07-29,1일차,13:50,14:50,Blue Turtle,이라부,식사,바다 전망 레스토랑 점심·버거·타코라이스 위주(저녁 파스타와 중복 방지),영업 확인,없음,점심,https://www.google.com/maps/search/?api=1&query=Blue%20Turtle%20Irabu%20Miyakojima,,
-D1-02B,2026-07-29,1일차,14:50,15:15,와타구치노하마,이라부,해변,점심 식당 바로 앞 백사장 산책,선택,간조 후 상승 구간,,https://www.google.com/maps/search/?api=1&query=Toguchi%20no%20Hama%20Irabu%20Miyakojima,,낮음
-D1-03,2026-07-29,1일차,15:20,15:50,이라부대교,이라부,관광,공항에서 숙소 방향 전망 드라이브,확정,없음,,https://www.google.com/maps/search/?api=1&query=Irabu%20Bridge%20Miyakojima,,
-D1-04,2026-07-29,1일차,15:50,16:35,쿠가이 숙소 거점,히라라,휴식,체크인·휴식,확정,없음,,,,
+D1-02C,2026-07-29,1일차,12:45,13:45,Blue Turtle,이라부,식사,바다 전망 레스토랑 점심·버거·타코라이스 위주(저녁 파스타와 중복 방지),영업 확인,없음,점심,https://www.google.com/maps/search/?api=1&query=Blue%20Turtle%20Irabu%20Miyakojima,,
+D1-02B,2026-07-29,1일차,13:45,14:15,와타구치노하마,이라부,해변,점심 식당 바로 앞 백사장 산책,선택,간조 13:37 전후·낮은 수위,,https://www.google.com/maps/search/?api=1&query=Toguchi%20no%20Hama%20Irabu%20Miyakojima,,낮음
+D1-03,2026-07-29,1일차,14:20,14:50,이라부대교,이라부,관광,공항에서 숙소 방향 전망 드라이브,확정,없음,,https://www.google.com/maps/search/?api=1&query=Irabu%20Bridge%20Miyakojima,,
+D1-04,2026-07-29,1일차,15:00,16:35,쿠가이 숙소 거점,히라라,휴식,체크인·휴식,확정,없음,,,,
 D1-05,2026-07-29,1일차,18:00,19:10,Pasta House Niwa,히라라,식사,숙소 인근 첫날 저녁,예약 확정,없음,저녁,https://www.google.com/maps/search/?api=1&query=Pasta%20House%20Niwa%20Miyakojima,예약완료,
 D1-05B,2026-07-29,1일차,19:15,19:45,트리바 선셋비치,히라라,해변,일몰 18:51 직후 잔광 산책,확정,없음,,https://www.google.com/maps/search/?api=1&query=Miyako%20Sunset%20Beach%20Hirara,,낮음
 D1-06,2026-07-29,1일차,19:50,20:40,MaxValu 미야코미나미점·다이소,히라라,쇼핑,생수·아침·해변 용품 구매,확정,없음,,https://www.google.com/maps/search/?api=1&query=MaxValu%20Miyako%20Minami,,
