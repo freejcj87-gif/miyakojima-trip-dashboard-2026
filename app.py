@@ -186,7 +186,8 @@ with tab_grid:
                 book_style = "box-shadow:inset 0 0 0 2px #1E9E4B;"
             tip = escape(
                 f"{row.start}–{row.end} {row.place} · {row.activity}"
-                + (f" · {row.booking}" if row.booking else ""),
+                + (f" · {row.booking}" if row.booking else "")
+                + (f" · 🐢거북이 {row.turtle}" if row.turtle else ""),
                 quote=True,
             )
             blocks += (
@@ -242,6 +243,7 @@ with tab_timeline:
             map_link = f' · <a href="{row.maps_url}" target="_blank">Google 지도</a>' if row.maps_url else ""
             meal = f'<span class="tag">{row.meal}</span>' if row.meal else ""
             tide_tag = f'<span class="tag">🌊 {row.tide_note}</span>' if row.tide_note and row.tide_note != "없음" else ""
+            turtle_tag = f'<span class="tag">🐢 거북이 {row.turtle}</span>' if row.turtle else ""
             if row.booking == "예약필":
                 booking_badge = '<span class="badge-need">❗ 예약필</span>'
             elif row.booking == "예약완료":
@@ -255,7 +257,7 @@ with tab_timeline:
                   <div class="event-place">{row.place}</div>
                   <div>{row.activity}{map_link}</div>
                   <span class="tag">{row.area}</span><span class="tag">{row.category}</span>
-                  <span class="tag">{row.status}</span>{meal}{tide_tag}
+                  <span class="tag">{row.status}</span>{meal}{tide_tag}{turtle_tag}
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -291,12 +293,13 @@ with tab_timeline:
 
 with tab_overview:
     st.subheader("전체 5일 일정")
-    display = itinerary[["date", "day_label", "start", "end", "place", "category", "activity", "status", "booking"]].copy()
+    display = itinerary[["date", "day_label", "start", "end", "place", "category", "activity", "status", "booking", "turtle"]].copy()
     display["date"] = display["date"].dt.strftime("%m/%d")
     display["booking"] = display["booking"].map(
         lambda v: "❗ 예약필" if v == "예약필" else ("✅ 예약완료" if v == "예약완료" else "")
     )
-    display.columns = ["날짜", "일차", "시작", "종료", "장소", "유형", "활동", "상태", "예약"]
+    display["turtle"] = display["turtle"].map(lambda v: f"🐢 {v}" if v else "")
+    display.columns = ["날짜", "일차", "시작", "종료", "장소", "유형", "활동", "상태", "예약", "거북이"]
     st.dataframe(display, hide_index=True, use_container_width=True, height=610)
     st.download_button(
         "공개용 일정 CSV 다운로드",
