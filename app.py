@@ -275,7 +275,8 @@ with tab_timeline:
         )
         st.subheader("핵심 운영")
         if selected_day == "1일차":
-            st.success("11:00 공항 도착 → PADA X SOU 무료 픽업 → 12:40 17END. 간조 13:37을 활용합니다.")
+            st.success("11:00 공항 도착 → PADA X SOU 무료 픽업 → 12:40 17END(간조 13:37) → 13:50 Blue Turtle 점심")
+            st.info("Blue Turtle: 점심 11:00~17:00 연속 영업·일요일 휴무·점심 예약 불가(워크인). 대안: 이라부소바 카메(15시 전 품절 주의)")
         elif selected_day == "3일차":
             st.warning("11:30까지 시모지시마 공항 도착. 숙소에서 10:30 출발, 11:15 도착 목표로 15분 여유를 둡니다.")
         elif selected_day == "4일차":
