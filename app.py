@@ -137,8 +137,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_grid, tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check = st.tabs(
-    ["📅 시간표", "🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전"]
+tab_grid, tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check, tab_pack = st.tabs(
+    ["📅 시간표", "🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전", "🎒 준비물"]
 )
 
 with tab_grid:
@@ -423,5 +423,28 @@ with tab_check:
     st.divider()
     st.markdown("**공식 참고:** [JMA 조석표](https://www.data.jma.go.jp/kaiyou/db/tide/suisan/suisan.php?LV=DL&S_HILO=on&de=03&ds=20&me=08&ms=07&stn=R1&ye=2026&ys=2026) · [야비지](https://miyako-guide.net/spots/spots-1508/) · [시모지시마](https://visitokinawajapan.com/destinations/miyako-islands/shimoji-island/) · [야키니쿠 나카오](https://yakinikunakao.owst.jp/)")
 
+with tab_pack:
+    st.subheader("🎒 가기 전 필수 준비물 체크리스트")
+    st.caption("유튜브·블로그 후기와 현지 사정(산호 보호 선크림, 해파리 시즌, 보트 투어, 일본 콘센트 등)을 리서치해 구성했습니다. 필수 항목부터 챙기세요.")
+    packing = pd.read_csv(DATA / "packing.csv", dtype=str).fillna("")
+    total_req = (packing["priority"] == "필수").sum()
+    st.markdown(
+        f'<span class="badge-need">🔴 필수 {total_req}개</span>'
+        f'<span class="tag">⚪ 권장 {(packing["priority"] != "필수").sum()}개</span>',
+        unsafe_allow_html=True,
+    )
+    pack_cols = st.columns(2)
+    categories = packing["category"].drop_duplicates().tolist()
+    for idx, cat in enumerate(categories):
+        with pack_cols[idx % 2]:
+            st.markdown(f"#### {cat}")
+            for row in packing[packing["category"].eq(cat)].itertuples():
+                marker = "🔴" if row.priority == "필수" else "⚪"
+                st.checkbox(
+                    f"{marker} **{row.item}** — {row.note}",
+                    key=f"pack-{row.category}-{row.item}",
+                )
+    st.info("💡 리프슈즈·구명조끼 등 물놀이 장비 일부는 1일차 저녁 MaxValu·다이소에서 현지 구매로 대체 가능합니다.")
+
 st.divider()
-st.caption("v0.8.0 · 야비지 오후 투어(12:45 집결~17:10) 반영 · 아침 시작 09:00 전일 적용 · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
+st.caption("v0.9.0 · 준비물 체크리스트 탭 추가 · 야비지 오후 투어(12:45 집결~17:10) · 아침 시작 09:00 전일 적용 · 운영시간·예약·날씨·투어 일정은 출발 직전 다시 확인하세요.")
