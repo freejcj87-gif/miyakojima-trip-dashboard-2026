@@ -303,6 +303,9 @@ with tab_timeline:
                 "- [OKABERRY](https://www.google.com/maps/search/?api=1&query=OKABERRY%20Miyakojima) — 브라질리언 아사이볼(셀프 담기·그램 과금) · 💬총평: 폭염 물놀이 후 당 충전으로 최적\n"
                 "- [futaba-knots](https://www.google.com/maps/search/?api=1&query=futaba%20knots%20Miyakojima) — 한국식 커피·디저트(바나나 카라멜라이즈 크로플·치즈케익) · 💬총평: 한국인 입맛 저격 후기. 아메리카노는 탄맛 강하다는 평 — 라테류 추천"
             )
+        elif selected_day == "3일차":
+            st.warning("🐢 거북 골든타임: 만조 08:00 전후 — 08:30 출발 엄수, 11시 전 물놀이 마무리(이후 급격히 얕아짐). 무료주차 만차 시 유료 ¥2,000.")
+            st.info("입수 전 비치하우스 스태프에게 '오늘 거북 포인트' 문의 → 바다 보고 왼쪽 해초 지대에서 대기 · 리프 밖 금지 · 아동 라이프재킷 렌탈 · 거북 접촉 금지(2m)")
         elif selected_day == "4일차":
             st.warning("야비지 투어 12:45 현장 집결 엄수(숙소 12:00 출발) · 17:10 종료. 집결 전 점심은 가볍게 — 보트 뱃멀미 대비.")
             st.success("투어 중 간조 15:05 — 산호 노출 명장면 시간대 포함 · 종료 17:10 → 나카오 19:00 저녁 (6석 예약 완료 ✅)")
