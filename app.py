@@ -137,8 +137,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_grid, tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check, tab_pack = st.tabs(
-    ["📅 시간표", "🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전", "🎒 준비물"]
+tab_grid, tab_timeline, tab_overview, tab_restaurants, tab_tides, tab_check, tab_pack, tab_story = st.tabs(
+    ["📅 시간표", "🕒 날짜별 타임라인", "🗓️ 전체 일정", "🍽️ 식당 리스트", "🌊 조석·일몰", "✅ 예약·안전", "🎒 준비물", "📖 옛날이야기"]
 )
 
 with tab_grid:
@@ -469,5 +469,14 @@ with tab_pack:
                 )
     st.info("💡 리프슈즈·구명조끼 등 물놀이 장비 일부는 1일차 저녁 MaxValu·다이소에서 현지 구매로 대체 가능합니다.")
 
+with tab_story:
+    st.subheader("📖 규나·연우에게 들려주는 미야코지마 이야기")
+    st.caption("전설·설화 12편을 방문 장소와 짝지어 정리했습니다. '어디서 들려주면 좋은가'를 참고해 현장에서 각색해 들려주세요.")
+    stories_raw = (DATA / "stories.md").read_text(encoding="utf-8")
+    for part in stories_raw.split("\n## ")[1:]:
+        story_title, _, story_body = part.partition("\n")
+        with st.expander(story_title.strip()):
+            st.markdown(story_body.strip().strip("-").strip())
+
 st.divider()
-st.caption("v0.10.1 · 한국인 카페 후기 반영: 뉴하마야·사마타이요 점심 후보, OKABERRY·futaba-knots 간식 후보 추가 · 야비지 오후 투어(12:45 집결~17:10) · 아침 09:00 전일 적용 · 운영시간·예약·날씨는 출발 직전 다시 확인하세요.")
+st.caption("v0.11.0 · 옛날이야기 탭 추가(전설·설화 12편, 장소 연계) · 야비지 오후 투어(12:45 집결~17:10) · 아침 09:00 전일 적용 · 운영시간·예약·날씨는 출발 직전 다시 확인하세요.")
