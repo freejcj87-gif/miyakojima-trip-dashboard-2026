@@ -177,6 +177,8 @@ with tab_grid:
             top = (_to_min(row.start) - GRID_START) / 60 * PX_PER_HOUR
             height = max((_to_min(row.end) - _to_min(row.start)) / 60 * PX_PER_HOUR - 2, 14)
             bg, fg = CAT_STYLE.get(row.category, ("#EEF2F5", "#3D5468"))
+            if row.status == "보류":
+                bg, fg = "#E9EDF0", "#93A1AE"
             book_mark, book_style = "", ""
             if row.booking == "예약필":
                 book_mark = "❗"
@@ -250,9 +252,10 @@ with tab_timeline:
                 booking_badge = '<span class="badge-done">✅ 예약완료</span>'
             else:
                 booking_badge = ""
+            hold_style = ' style="background:#F0F2F4;opacity:.7;border-left-color:#B9C4CC"' if row.status == "보류" else ""
             st.markdown(
                 f"""
-                <div class="event">
+                <div class="event"{hold_style}>
                   <span class="event-time">{row.start}–{row.end}</span> {booking_badge}
                   <div class="event-place">{row.place}</div>
                   <div>{row.activity}{map_link}</div>
@@ -282,9 +285,14 @@ with tab_timeline:
         elif selected_day == "2일차":
             st.warning("11:30까지 시모지시마 공항 도착. 숙소에서 10:30 출발, 11:15 도착 목표로 15분 여유를 둡니다.")
             st.info("아침: 닌긴 커피(도보 4분·09:00 오픈) 모닝커피·도넛 후 공항 출발 · 점심 시마노에키 명물 — 초지야 미야코소바(유키시오 간)·오키나와 튀김·유키시오 생식빵·수제 젤라토")
-            st.info("☕ 픽업 직후: 국나카 상점(공항 차 5분·연중무휴) — 이라부에서 커피 재배까지 도전하는 로스터리. 드립 ¥500·흑당라테 ¥650 테이크아웃 후 숙소 이동")
+            st.info("☕ 국나카 상점(후보): 17END에서 차 3분·연중무휴 08:00~19:00 — 이라부에서 커피 재배까지 도전하는 로스터리. 대표: 드립 ¥500·카페라테 ¥600·흑당라테 ¥650")
             st.info(
-                "🍽️ **점심 플랜 B** (시마노에키 대안·목요일 영업 확인 완료)\n"
+                "🍽️ **점심 플랜 B — 이라부 현지** (17END·국나카 동선에서 바로, 선택 시 시마노에키 생략)\n"
+                "- [오반마이 식당](https://www.google.com/maps/search/?api=1&query=%E3%81%8A%E3%83%BC%E3%81%B0%E3%82%93%E3%81%BE%E3%81%84%E9%A3%9F%E5%A0%82%20%E4%BC%8A%E8%89%AF%E9%83%A8) — 사라하마 어항 직영·바다뷰. 대표: 신선 해선동(해산물덮밥) ¥1000 · 09:30~매진 시 종료(⚠️정오 전후 매진 잦음)·부정휴\n"
+                "- [이라부소바 카메](https://www.google.com/maps/search/?api=1&query=%E4%BC%8A%E8%89%AF%E9%83%A8%E3%81%9D%E3%81%B0%20%E3%81%8B%E3%82%81) — 이라부 대표 소바집. 대표: 카메소바(연골 소키+나마리) ¥750 · 매일 11:00~15:30·부정휴\n"
+                "- [soraniwa hotel and cafe](https://www.google.com/maps/search/?api=1&query=soraniwa%20hotel%20and%20cafe%20Irabu) — 이라부대교 절경 테라스. 대표: 섬 식재료 카페 런치(타코라이스·파스타) · 런치 11:30~\n"
+                "\n"
+                "🍽️ **점심 플랜 B — 숙소 인근** (목요일 영업 확인 완료)\n"
                 "- [고자 소바야](https://www.google.com/maps/search/?api=1&query=%EA%B3%A0%EC%9E%90%20%EC%86%8C%EB%B0%94%EC%95%BC%20(%E5%8F%A4%E8%AC%9D%E3%81%9D%E3%81%B0%E5%B1%8B)%20Miyakojima) — 1932년 창업 미야코소바 노포. 대표: 미야코소바·소키소바 · 11:00~16:00·수요일 휴무·예약 불가 · 숙소 차 8~10분\n"
                 "- [키친 Tanto](https://www.google.com/maps/search/?api=1&query=%ED%82%A4%EC%B9%9C%20Tanto%20Miyakojima) — 미야코규 햄버그·스테이크·근해 참치 정식(양 푸짐, 아이동반 적합) · 11:30~14:30(LO 14:00)·일요일 휴무 · 숙소 차 9~10분\n"
                 "- [유키시오 스테이크](https://www.google.com/maps/search/?api=1&query=%EC%9C%A0%ED%82%A4%EC%8B%9C%EC%98%A4%20%EC%8A%A4%ED%85%8C%EC%9D%B4%ED%81%AC%20(%E3%83%A6%E3%82%AD%E3%82%B7%E3%82%AA%E3%82%B9%E3%83%86%E3%83%BC%E3%82%AD)%20Miyakojima) — '유키시오 런치'(미야코규 80g+아구돼지+함박+유키시오 소프트) · 런치 11:00~15:00(LO 14:00)·연중무휴 · 숙소 도보 1~2분"
@@ -421,7 +429,8 @@ with tab_check:
         ("반납", "8/2 11:00까지 지정 사무실 도착. 지도의 ‘폐업함’ 표시와 무관하게 안내 위치 이용·반납 후 즉시 공항 이동"),
         ("야비지", "12:45 현장 집결·17:10 종료 확정. 집합지 위치·8세 2명 참가 가능·아동용 구명조끼·화장실 확인"),
         ("야키니쿠", "✅ 예약 완료 — 8/1 19:00 나카오 성인 4명+8세 2명, 총 6석"),
-        ("식당", "✅ 카메스시 7/31 18:00 6석 예약 완료(김규나 명의) · Free Bird 6석 예약 필요, Ninufa·돈카라야 당일 영업 확인"),
+        ("식당", "✅ 카메스시 7/31 18:00 6석 예약 완료(김규나 명의) · Ninufa 당일 영업 확인 · 돈카라야는 보류(방문 시 재확인)"),
+        ("바베큐", "7/30 저녁 숙소 바베큐 — 그릴·숯·야외 화기 사용 가능 여부를 숙소에 사전 확인, 재료·숯은 당일 17:55 MaxValu에서 구매"),
         ("해양 안전", "출발 48시간 전 풍속·파고·현지 통제 재확인, 어린이 1명당 담당 성인 지정"),
         ("폭염", "45~60분마다 물·그늘 휴식, 아이 컨디션에 따라 일정 단축"),
     ]
@@ -455,4 +464,4 @@ with tab_pack:
     st.info("💡 리프슈즈·구명조끼 등 물놀이 장비 일부는 1일차 저녁 MaxValu·다이소에서 현지 구매로 대체 가능합니다.")
 
 st.divider()
-st.caption("v0.9.3 · 2일차 점심 플랜B 3곳 추가(고자 소바야·키친 Tanto·유키시오 런치, 목요일 영업 확인) · 야비지 오후 투어(12:45 집결~17:10) · 아침 09:00 전일 적용 · 운영시간·예약·날씨는 출발 직전 다시 확인하세요.")
+st.caption("v0.10.0 · 2일차 개편: 픽업 후 17END·국나카(후보)·점심 플랜B 6곳·돈카라야 보류·저녁 숙소 바베큐 · 야비지 오후 투어(12:45 집결~17:10) · 아침 09:00 전일 적용 · 운영시간·예약·날씨는 출발 직전 다시 확인하세요.")
